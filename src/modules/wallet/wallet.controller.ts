@@ -7,6 +7,8 @@ import {
   Put,
   Res,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { transferDto } from './wallet.dto';
@@ -32,6 +34,7 @@ export class WalletController {
   }
 
   @Post('transfer')
+  @UsePipes(new ValidationPipe())
   async transferFunds(@Res() res: Response, @Body() body: transferDto) {
     const result = await this.walletService.transferFunds(body);
     res.json({
