@@ -4,5 +4,4 @@ export class CreateBusinessDto {
   businessEmail: string;
   city: string;
   location: string;
-  postalCode: string;
 }
