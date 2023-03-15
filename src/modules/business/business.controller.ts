@@ -8,6 +8,8 @@ import {
   Post,
   Put,
   Res,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { BusinessService } from './business.service';
 import { CreateBusinessDto } from '../dtos/CreateBusiness.dtos';
@@ -24,6 +26,7 @@ export class BusinessController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe())
   async createBusiness(
     @Res() res: Response,
     @Body() createBusinessDto: CreateBusinessDto,
