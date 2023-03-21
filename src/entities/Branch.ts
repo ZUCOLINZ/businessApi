@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Business } from './Business';
+import { RevenueGoal } from './RevenueGoal';
 
 @Entity()
 export class Branch {
@@ -28,6 +30,9 @@ export class Branch {
 
   @Column({ type: 'varchar' })
   address?: string;
+
+  @OneToOne(() => RevenueGoal, (revenueGoal) => revenueGoal.branch)
+  revenueGoal?: RevenueGoal;
 
   @ManyToOne(() => Business, (business) => business.branch)
   business?: Business;

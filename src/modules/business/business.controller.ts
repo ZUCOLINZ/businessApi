@@ -15,10 +15,14 @@ import { BusinessService } from './business.service';
 import { CreateBusinessDto } from '../dtos/CreateBusiness.dtos';
 import { UpdateBusinessDto } from '../dtos/UpdateBusiness';
 import { Response } from 'express';
+import { CreateRevenueGoalDto } from '../dtos/CreateRevenueGoal.dtos';
+import { UpdateRevenueGoalDto } from '../dtos/UpdateRevenueGoal';
 
 @Controller('business')
 export class BusinessController {
-  constructor(private readonly businessService: BusinessService) {}
+  constructor(
+    private readonly businessService: BusinessService, // private readonly revenueGoal: RevenueGoal,
+  ) {}
 
   @Get()
   async getBusiness() {
@@ -55,5 +59,37 @@ export class BusinessController {
   ) {
     await this.businessService.deleteBusinessById(id);
     res.json({ msg: 'Profile deleted successfully' });
+  }
+
+  @Post(':businessId/revenue-goals')
+  async createRevenueGoal(
+    @Param('businessId') businessId: number,
+    @Body() createRevenueGoalDto: CreateRevenueGoalDto,
+  ) {
+    return this.businessService.createRevenueGoal(
+      businessId,
+      createRevenueGoalDto,
+    );
+  }
+
+  @Put(':businessId/revenue-goals/:revenueGoalId')
+  async updateRevenueGoal(
+    @Param('businessId') businessId: number,
+    @Param('revenueGoalId') revenueGoalId: number,
+    @Body() updateRevenueGoalDto: UpdateRevenueGoalDto,
+  ) {
+    return this.businessService.updateRevenueGoal(
+      businessId,
+      revenueGoalId,
+      updateRevenueGoalDto,
+    );
+  }
+
+  @Delete(':businessId/revenue-goals/:revenueGoalId')
+  async removeRevenueGoal(
+    @Param('businessId') businessId: number,
+    @Param('revenueGoalId') revenueGoalId: number,
+  ) {
+    return this.businessService.removeRevenueGoal(businessId, revenueGoalId);
   }
 }

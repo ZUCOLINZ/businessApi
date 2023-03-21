@@ -6,13 +6,16 @@ import { CreateBusinessDto } from '../dtos/CreateBusiness.dtos';
 import { UpdateBusinessDto } from '../dtos/UpdateBusiness';
 import { Branch } from 'src/entities/Branch';
 import { Wallet } from 'src/entities/Wallet';
-
+import { RevenueGoal } from 'src/entities/RevenueGoal';
+import { CreateRevenueGoalDto } from '../dtos/CreateRevenueGoal.dtos';
 @Injectable()
 export class BusinessService {
   constructor(
     @InjectRepository(Business) private businessRepo: Repository<Business>,
     @InjectRepository(Branch) private branchRepo: Repository<Branch>,
     @InjectRepository(Wallet) private walletRepo: Repository<Wallet>,
+    @InjectRepository(RevenueGoal)
+    private readonly revenueGoalRepository: Repository<RevenueGoal>,
   ) {}
   async findBusiness() {
     return await this.businessRepo.find();
@@ -99,5 +102,47 @@ export class BusinessService {
         }),
       );
     } catch (error) {}
+  }
+
+  async createRevenueGoal(
+    id: number,
+    createRevenueGoalDto: CreateRevenueGoalDto,
+  ) {
+    const business = await this.businessRepo.findOne({
+      where: { id },
+    });
+    if (!business) {
+      throw new Error('Business not found');
+    }
+    const revenueGoal = this.revenueGoalRepository.create({
+      ...createRevenueGoalDto,
+      business,
+    });
+    return await this.revenueGoalRepository.save(revenueGoal);
+  }
+
+  async updateRevenueGoal(
+    id: number,
+    revenueGoalId: number,
+    updateRevenueGoalDto: CreateRevenueGoalDto,
+  ) {
+    const revenueGoal = await this.revenueGoalRepository.findOne({
+      where: { id: revenueGoalId, business: { id } },
+    });
+    if (!revenueGoal) {
+      throw new Error('Revenue goal not found');
+    }
+    this.revenueGoalRepository.merge(revenueGoal, updateRevenueGoalDto);
+    return await this.revenueGoalRepository.save(revenueGoal);
+  }
+
+  async removeRevenueGoal(id: number, revenueGoalId: number) {
+    const revenueGoal = await this.revenueGoalRepository.findOne({
+      where: { id: revenueGoalId, business: { id } },
+    });
+    if (!revenueGoal) {
+      throw new Error('Revenue goal not found');
+    }
+    await this.revenueGoalRepository.remove(revenueGoal);
   }
 }

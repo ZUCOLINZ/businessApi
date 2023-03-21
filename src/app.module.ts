@@ -8,6 +8,7 @@ import { WalletModule } from './modules/wallet/wallet.module';
 import { Business } from './entities/Business';
 import { Branch } from './entities/Branch';
 import { Wallet } from './entities/Wallet';
+import { RevenueGoal } from './entities/RevenueGoal';
 
 @Module({
   imports: [
@@ -18,11 +19,11 @@ import { Wallet } from './entities/Wallet';
       username: 'admin2',
       password: 'collinsokoye',
       database: 'thidgy',
-      entities: [Business, Branch, Wallet],
+      entities: [Business, Branch, Wallet, RevenueGoal],
       synchronize: true,
     }),
 
-    TypeOrmModule.forFeature([Business, Branch, Wallet]),
+    TypeOrmModule.forFeature([Business, Branch, Wallet, RevenueGoal]),
     BusinessModule,
     BranchModule,
     WalletModule,

@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Branch } from './Branch';
+import { RevenueGoal } from './RevenueGoal';
 import { Wallet } from './Wallet';
 
 @Entity()
@@ -41,6 +43,9 @@ export class Business {
   @OneToOne(() => Wallet, (wallet) => wallet.business)
   @JoinColumn()
   wallet?: Wallet;
+
+  @OneToMany(() => RevenueGoal, (revenueGoal) => revenueGoal.business)
+  revenueGoal?: RevenueGoal;
 
   @Column({ type: 'varchar' })
   location?: string;
